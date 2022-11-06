@@ -21,6 +21,7 @@ from rest_framework import routers
 
 router = routers.SimpleRouter()
 router.register(r'worker', WorkerViewSet, basename='worker')
+router.register(r'position', PositionViewSet, basename='position')
 print(router.urls)
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +30,6 @@ urlpatterns = [
     # path('api/v1/workerlist/<int:pk>', WorkerAPIUpdate.as_view()),
     # path('api/v1/workerdetail/<int:pk>', WorkerAPIDetailView.as_view()),
     path('api/v1/',include(router.urls)), #get post, с ключем put,delete,get
+    path('api/v1/', include(router.urls))
 
 ]
