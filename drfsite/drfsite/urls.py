@@ -16,20 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 
+import workers.urls
 from workers.views import *
 from rest_framework import routers
 
-router = routers.SimpleRouter()
-router.register(r'worker', WorkerViewSet, basename='worker')
-router.register(r'position', PositionViewSet, basename='position')
-print(router.urls)
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    #path('api/v1/drf-auth/', include('rest_framework.urls')), #session auth
+    path("admin/", admin.site.urls),
+    path("api/v1/workers/", include("workers.urls"))
+    # path('api/v1/drf-auth/', include('rest_framework.urls')), #session auth
     # path('api/v1/workerlist', WorkerAPIList.as_view()),
     # path('api/v1/workerlist/<int:pk>', WorkerAPIUpdate.as_view()),
     # path('api/v1/workerdetail/<int:pk>', WorkerAPIDetailView.as_view()),
-    path('api/v1/',include(router.urls)), #get post, с ключем put,delete,get
-    path('api/v1/', include(router.urls))
+
 
 ]

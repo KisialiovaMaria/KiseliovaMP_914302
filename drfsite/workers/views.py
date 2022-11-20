@@ -1,3 +1,4 @@
+
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
 
@@ -8,7 +9,6 @@ from .Serializers import *
 
 
 # APIView
-
 
 class WorkerViewSet(viewsets.ModelViewSet): #предоставляет все CRUD
     queryset = Worker.objects.all()
@@ -31,10 +31,10 @@ class PositionViewSet(viewsets.ModelViewSet):
 #     queryset = Worker.objects.all() # данные которые будут возвращаться по эапросу
 #     serializer_class = WorkerSerializer # класс, который обрабатывает этот queryser
 #
-# class WorkerAPIUpdate(generics.UpdateAPIView):
-#     queryset = Worker.objects.all()
-#     serializer_class = WorkerSerializer
-#
+class WorkerAPIUpdate(generics.UpdateAPIView):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerSerializer
+
 #
 # class WorkerAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Worker.objects.all()

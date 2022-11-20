@@ -1,25 +1,123 @@
 from rest_framework import serializers
 from .models import *
 
-class PositionSerializer(serializers.ModelSerializer):
 
+class PositionSerializer1(serializers.ModelSerializer):
     class Meta:
         model = Position
         fields = (
             "name",
         )
 
-class WorkerSerializer(serializers.ModelSerializer):
-    #user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    position = PositionSerializer() #получаем данные и для FK
-    #если встречается choices fiels = serializers.CharField(source='get_service_type_display')
+
+class WorkerSerializer1(serializers.ModelSerializer):
+    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    position = PositionSerializer1()  # получаем данные и для FK
+
+    # если встречается choices fiels = serializers.CharField(source='get_service_type_display')
     class Meta:
         model = Worker
         fields = "__all__"
 
 
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
 
-#
+
+class DepartmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class EventTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class SendTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class RoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class WorkerSerializer(serializers.ModelSerializer):
+    positionID = PositionSerializer()
+    departmentID = DepartmentSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class PhotoSerializer(serializers.ModelSerializer):
+    workerID = WorkerSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class PhotoBaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+class ControlPointSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class CameraSerializer(serializers.ModelSerializer):
+    controlPointID = ControlPointSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class ControlListSerializer(serializers.ModelSerializer):
+    workerID = WorkerSerializer()
+    controlPointID = ControlPointSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
+class UserSerializer(serializers.ModelSerializer):
+    roleID = RoleSerializer()
+    workerID = WorkerSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+class NotificationsSerializer(serializers.ModelSerializer):
+    userID = UserSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+class VisitTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+class VisitJuornalSerializer(serializers.ModelSerializer):
+    personID = WorkerSerializer()
+    fixedPhotoID = PhotoBaseSerializer()
+    controlPointID = ControlPointSerializer()
+    visitTypeID = VisitTypeSerializer()
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+
 # class WorkerSerializerSimple(serializers.Serializer):
 #     name = serializers.CharField()
 #     position = serializers.IntegerField()

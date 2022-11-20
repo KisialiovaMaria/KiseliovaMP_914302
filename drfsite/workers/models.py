@@ -5,19 +5,106 @@ from django.db import models
 #from rest_framework.authtoken.admin import User
 from django.contrib.auth.models import User
 
+# class Position(models.Model):
+#     name = models.CharField(max_length=100, db_index=True)
+#     def __str__(self):
+#         return self.name
+# class Worker(models.Model):
+#     name = models.CharField(max_length=255)
+#     time_create = models.DateTimeField(auto_now_add=True)
+#     time_update = models.DateTimeField(auto_now=True)
+#     position = models.ForeignKey(Position, on_delete=models.PROTECT, null=True)
+#     #user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+#
+#     def _str__(self):
+#         return self.title + "  " + self.cat.name
 class Position(models.Model):
-    name = models.CharField(max_length=100, db_index=True)
-    def __str__(self):
-        return self.name
-class Worker(models.Model):
-    name = models.CharField(max_length=255)
-    time_create = models.DateTimeField(auto_now_add=True)
-    time_update = models.DateTimeField(auto_now=True)
-    position = models.ForeignKey(Position, on_delete=models.PROTECT, null=True)
-    #user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
+    positionName = models.CharField(max_length=20)
 
-    def _str__(self):
-        return self.title + "  " + self.cat.name
+
+class Department(models.Model):
+    departmentName = models.CharField(max_length=20)
+
+
+class EventType(models.Model):
+    eventType = models.CharField(max_length=20)
+
+
+class SendType(models.Model):
+    sendType = models.CharField(max_length=20)
+
+
+class Role(models.Model):
+    rolename = models.CharField(max_length=20)
+
+
+class Worker(models.Model):
+    name = models.CharField(max_length=20)
+    surname = models.CharField(max_length=25)
+    patronymic = models.CharField(max_length=20)
+    phone = models.IntegerField()
+    email = models.CharField(max_length=25)
+    positionID = models.ForeignKey(Position, on_delete=models.NOT_PROVIDED)
+    departmentID = models.ForeignKey(Department, on_delete=models.NOT_PROVIDED)
+
+
+class Photo(models.Model):
+    photo = models.ImageField()
+    workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
+
+
+class PhotoBase(models.Model):
+    photo = models.ImageField()
+
+
+class ControlPoint(models.Model):
+    name = models.CharField(max_length=20)
+
+
+class Camera(models.Model):
+    ipAdress = models.CharField(max_length=15)
+    name = models.CharField(max_length=20)
+    controlPointID = models.OneToOneField(ControlPoint, on_delete=models.CASCADE)
+
+
+class ControlList(models.Model):
+    workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
+    controlPointID = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
+
+
+class User(models.Model):
+    login = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    activity = models.BooleanField()
+    roleID = models.ForeignKey(Role, on_delete=models.NOT_PROVIDED)
+    workerID = models.ForeignKey(Worker, on_delete=models.NOT_PROVIDED)
+
+
+class Notifications(models.Model):
+    sendTypeID = models.ForeignKey(SendType, on_delete=models.CASCADE)
+    eventTypeID = models.ForeignKey(EventType, on_delete=models.CASCADE)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    activity = models.BooleanField(null=True)
+
+
+class Report(models.Model):
+    title = models.CharField(max_length=20)
+    periodFrom = models.DateField()
+    periodTo = models.DateField()
+    authID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    text = models.CharField(max_length=400)
+
+
+class VisitType(models.Model):
+    visitTypeName = models.CharField(max_length=20)
+
+
+class VisitJuornal(models.Model):
+    date = models.DateTimeField(auto_now=True)
+    personID = models.ForeignKey(Worker, on_delete=models.SET_NULL, null=True)
+    fixedPhotoID = models.ForeignKey(PhotoBase, on_delete=models.SET_NULL, null=True)
+    controlPointID = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
+    visitTypeID = models.ForeignKey(VisitType, on_delete=models.NOT_PROVIDED)
 
 
 
