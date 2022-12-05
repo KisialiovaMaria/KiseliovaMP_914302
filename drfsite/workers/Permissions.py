@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-
+#TODO is this nessisary
 class IsAdminOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:

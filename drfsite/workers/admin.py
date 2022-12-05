@@ -3,4 +3,3 @@ from .models import Worker, Position
 
 admin.site.register(Worker)
 admin.site.register(Position)
-# Register your models here.

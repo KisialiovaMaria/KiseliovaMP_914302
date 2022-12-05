@@ -2,22 +2,22 @@ from rest_framework import serializers
 from .models import *
 
 
-class PositionSerializer1(serializers.ModelSerializer):
-    class Meta:
-        model = Position
-        fields = (
-            "name",
-        )
-
-
-class WorkerSerializer1(serializers.ModelSerializer):
-    # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    position = PositionSerializer1()  # получаем данные и для FK
-
-    # если встречается choices fiels = serializers.CharField(source='get_service_type_display')
-    class Meta:
-        model = Worker
-        fields = "__all__"
+# class PositionSerializer1(serializers.ModelSerializer):
+#     class Meta:
+#         model = Position
+#         fields = (
+#             "name",
+#         )
+#
+#
+# class WorkerSerializer1(serializers.ModelSerializer):
+#     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+#     position = PositionSerializer1()  # получаем данные и для FK
+#
+#     # если встречается choices fiels = serializers.CharField(source='get_service_type_display')
+#     class Meta:
+#         model = Worker
+#         fields = "__all__"
 
 
 class PositionSerializer(serializers.ModelSerializer):
