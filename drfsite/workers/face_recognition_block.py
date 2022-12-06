@@ -13,12 +13,14 @@ class FaceRecognizer():
         self.video_capture = video_capture
         self.images_paths = workers_images_paths
         self.known_face_names = workers_names
+        self.recognised_names = []
 
     def start_recognition(self):
         for image_path in self.images_paths:
             img = face_recognition.load_image_file(image_path)
             img_face_encoding = face_recognition.face_encodings(img)[0]
             self.known_face_encodings.append(img_face_encoding)
+
 
         # Initialize some variables
         face_locations = []
@@ -42,10 +44,11 @@ class FaceRecognizer():
                 face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
                 face_names = []
+                name = 'nobody'
                 for face_encoding in face_encodings:
                     # See if the face is a match for the known face(s)
                     matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
-                    name = "Unknown"
+                    name = "unknown"
 
                     # # If a match was found in known_face_encodings, just use the first one.
                     # if True in matches:
@@ -59,6 +62,8 @@ class FaceRecognizer():
                         name = known_face_names[best_match_index]
 
                     face_names.append(name)
+                else:
+                    self.logging(name)
 
             process_this_frame = not process_this_frame
 
@@ -90,6 +95,20 @@ class FaceRecognizer():
         video_capture.release()
         cv2.destroyAllWindows()
 
+
+    def logging(self, name):
+        if len(self.recognised_names) == 10:
+            self.recognised_names.pop(0)
+        self.recognised_names.append(name)
+
+        if len(self.recognised_names)==10 and name == 'nobody' and self.recognised_names[-2] not in ['nobody']:
+            print(f'В комнату зашла {self.recognised_names[-2]}')
+
+
+
+
+
+
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
 
@@ -101,6 +120,7 @@ known_face_names = [
 ]
 recogn = FaceRecognizer(video_capture, ['images/obama.png', 'images/masha.png'], known_face_names)
 recogn.start_recognition()
+
 
 
 
