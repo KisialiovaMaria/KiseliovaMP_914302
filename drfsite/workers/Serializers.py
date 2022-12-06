@@ -28,25 +28,25 @@ class PositionSerializer(serializers.ModelSerializer):
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = Department
         fields = "__all__"
 
 
 class EventTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = EventType
         fields = "__all__"
 
 
 class SendTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = SendType
         fields = "__all__"
 
 
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = Role
         fields = "__all__"
 
 
@@ -54,31 +54,31 @@ class WorkerSerializer(serializers.ModelSerializer):
     positionID = PositionSerializer()
     departmentID = DepartmentSerializer()
     class Meta:
-        model = Position
+        model = Worker
         fields = "__all__"
 
 
 class PhotoSerializer(serializers.ModelSerializer):
     workerID = WorkerSerializer()
     class Meta:
-        model = Position
+        model = Photo
         fields = "__all__"
 
 
 class PhotoBaseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = PhotoBase
         fields = "__all__"
 class ControlPointSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = ControlPoint
         fields = "__all__"
 
 
 class CameraSerializer(serializers.ModelSerializer):
     controlPointID = ControlPointSerializer()
     class Meta:
-        model = Position
+        model = Camera
         fields = "__all__"
 
 
@@ -86,7 +86,7 @@ class ControlListSerializer(serializers.ModelSerializer):
     workerID = WorkerSerializer()
     controlPointID = ControlPointSerializer()
     class Meta:
-        model = Position
+        model = ControlList
         fields = "__all__"
 
 
@@ -94,18 +94,18 @@ class UserSerializer(serializers.ModelSerializer):
     roleID = RoleSerializer()
     workerID = WorkerSerializer()
     class Meta:
-        model = Position
+        model = User
         fields = "__all__"
 
 class NotificationsSerializer(serializers.ModelSerializer):
     userID = UserSerializer()
     class Meta:
-        model = Position
+        model = Notifications
         fields = "__all__"
 
 class VisitTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Position
+        model = VisitType
         fields = "__all__"
 
 class VisitJuornalSerializer(serializers.ModelSerializer):
@@ -114,7 +114,7 @@ class VisitJuornalSerializer(serializers.ModelSerializer):
     controlPointID = ControlPointSerializer()
     visitTypeID = VisitTypeSerializer()
     class Meta:
-        model = Position
+        model = VisitJuornal
         fields = "__all__"
 
 
