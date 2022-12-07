@@ -1,7 +1,14 @@
+import threading
+import cv2
+from django.http import StreamingHttpResponse
+from django.shortcuts import render
 from rest_framework import generics, viewsets
-from rest_framework.decorators import action
-
+from rest_framework.decorators import action, api_view
+from django.views.decorators import gzip
 from rest_framework.response import Response
+
+import FR.face_recognition_block
+from FR.face_recognition_block import FaceRecognizer
 from .models import *
 from .Serializers import *
 
@@ -57,6 +64,55 @@ class ControlPointViewSet(viewsets.ModelViewSet):
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
+
+@gzip.gzip_page
+def VideoPresentation(reqest):
+    try:
+        # cam = VideoCamera()
+
+        cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png','./FR/images/obama.png'],['1','2'])
+        cam2.start_video_representing()
+        for _ in range(1000):
+            pass
+        print('stop')
+        cam2.stop_video_representing()
+        #gen(cam)
+        #cam2.start_recognition()
+
+        return StreamingHttpResponse(FR.face_recognition_block.gen(cam2), content_type='multipart/x-mixed-replace;boundary=frame')
+    except:
+        pass
+    return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
+
+@gzip.gzip_page
+def Home(reqest):
+    try:
+        # cam = VideoCamera()
+
+        cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png','./FR/images/obama.png'],['1','2'])
+        cam2.start_video_representing()
+        for _ in range(1000):
+            pass
+        print('stop')
+        cam2.stop_video_representing()
+        #gen(cam)
+        #cam2.start_recognition()
+
+        return StreamingHttpResponse(FR.face_recognition_block.gen(cam2), content_type='multipart/x-mixed-replace;boundary=frame')
+    except:
+        pass
+    return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
+
+
+# @api_view(['GET'])
+# def fr_view(request):
+#     video_capture = cv2.VideoCapture(0)
+#     known_face_names = [
+#         "Barack Obama",
+#         "Masha Kiseliova"
+#     ]
+#     recogn = FaceRecognizer(video_capture, ['./FR/images/obama.png', './FR/images/masha.png'], known_face_names)
+#     recogn.start_recognition()
 
 # class PhotoBaseViewSet(viewsets.ModelViewSet):
 #     queryset = PhotoBase.objects.all()
