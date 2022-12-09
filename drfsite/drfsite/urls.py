@@ -23,7 +23,7 @@ from rest_framework import routers
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/", include("workers.urls"))
+    path("api/v1/", include("workers.urls")),
     # path('api/v1/drf-auth/', include('rest_framework.urls')), #session auth
     # path('api/v1/workerlist', WorkerAPIList.as_view()),
     # path('api/v1/workerlist/<int:pk>', WorkerAPIUpdate.as_view()),

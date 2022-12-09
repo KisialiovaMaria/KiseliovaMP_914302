@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from rest_framework.relations import PrimaryKeyRelatedField
+
 from .models import *
 
 
@@ -51,8 +53,20 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class WorkerSerializer(serializers.ModelSerializer):
-    positionID = PositionSerializer()
-    departmentID = DepartmentSerializer()
+    positionID = PrimaryKeyRelatedField(queryset=Position.objects.all())
+    departmentID = PrimaryKeyRelatedField(queryset=Department.objects.all())
+    # positionID = PositionSerializer()
+    # departmentID = DepartmentSerializer()
+
+    # def create(self, validated_data):
+    #     new_worker = Worker(name=validated_data['name'], surname=validated_data['surname'], patronymic=validated_data['patronymic'],
+    #            email=validated_data['email'], phone=validated_data['phone'], departmentID=Department(id=validated_data['departmentID']),
+    #            positionID=validated_data['positionID'])
+    #     new_worker.save()
+    #     return new_worker
+
+
+
     class Meta:
         model = Worker
         fields = "__all__"
