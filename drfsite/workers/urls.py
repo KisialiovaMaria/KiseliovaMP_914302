@@ -9,6 +9,7 @@ router.register(r"control-points", ControlPointViewSet, basename="control-points
 router.register(r"notifications", ControlPointViewSet, basename="notifications")
 
 
+
 urlpatterns = [
     path('', include(router.urls)),  # get post, с ключем put,delete,get
     path('positions/', PositionAPIView.as_view()),

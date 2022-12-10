@@ -60,6 +60,9 @@ class ControlPointViewSet(viewsets.ModelViewSet):
     queryset = ControlPoint.objects.all()
     serializer_class = ControlPointSerializer
 
+# class CameraViewSet(viewsets.ModelViewSet):  # предоставляет все CRUD
+#     queryset = Camera.objects.all()
+#     serializer_class = CameraSerializer
 
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()

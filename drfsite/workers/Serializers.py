@@ -83,12 +83,12 @@ class ControlPointSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CameraSerializer(serializers.ModelSerializer):
-    controlPointID = ControlPointSerializer()
-    class Meta:
-        model = Camera
-        fields = "__all__"
-
+# class CameraSerializer(serializers.ModelSerializer):
+#     controlPointID = ControlPointSerializer()
+#     class Meta:
+#         model = Camera
+#         fields = "__all__"
+#
 
 class ControlListSerializer(serializers.ModelSerializer):
     workerID = WorkerSerializer()
