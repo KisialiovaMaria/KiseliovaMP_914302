@@ -53,13 +53,12 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class WorkerSerializer(serializers.ModelSerializer):
-    #positionID = PrimaryKeyRelatedField(queryset=Position.objects.all())
-    #departmentID = PrimaryKeyRelatedField(queryset=Department.objects.all())
+    # positionID = PrimaryKeyRelatedField(queryset=Position.objects.all())
+    # departmentID = PrimaryKeyRelatedField(queryset=Department.objects.all())
     # positionID = PositionSerializer()
     # departmentID = DepartmentSerializer()
     positionID = SlugRelatedField("positionName", queryset=Position.objects.all())
     departmentID = SlugRelatedField("departmentName", queryset=Department.objects.all())
-
 
     class Meta:
         model = Worker
@@ -68,6 +67,7 @@ class WorkerSerializer(serializers.ModelSerializer):
 
 class PhotoSerializer(serializers.ModelSerializer):
     workerID = WorkerSerializer()
+
     class Meta:
         model = Photo
         fields = "__all__"
@@ -77,12 +77,19 @@ class PhotoBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhotoBase
         fields = "__all__"
+
+
 class ControlPointSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = ControlPoint
         fields = "__all__"
 
 
+class ControlPointUpdateCameraSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ControlPoint
+        fields = ['camera_activity']
 # class CameraSerializer(serializers.ModelSerializer):
 #     controlPointID = ControlPointSerializer()
 #     class Meta:
@@ -101,30 +108,35 @@ class ControlListSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     roleID = RoleSerializer()
     workerID = WorkerSerializer()
+
     class Meta:
         model = User
         fields = "__all__"
 
+
 class NotificationsSerializer(serializers.ModelSerializer):
     userID = UserSerializer()
+
     class Meta:
         model = Notifications
         fields = "__all__"
+
 
 class VisitTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = VisitType
         fields = "__all__"
 
+
 class VisitJuornalSerializer(serializers.ModelSerializer):
     personID = WorkerSerializer()
     fixedPhotoID = PhotoBaseSerializer()
     controlPointID = ControlPointSerializer()
     visitTypeID = VisitTypeSerializer()
+
     class Meta:
         model = VisitJuornal
         fields = "__all__"
-
 
 # class WorkerSerializerSimple(serializers.Serializer):
 #     name = serializers.CharField()

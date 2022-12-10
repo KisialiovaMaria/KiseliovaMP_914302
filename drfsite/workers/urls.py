@@ -6,7 +6,7 @@ from .views import *
 router = routers.SimpleRouter()
 router.register(r"workers", WorkerViewSet, basename="workers")
 router.register(r"control-points", ControlPointViewSet, basename="control-points")
-router.register(r"notifications", ControlPointViewSet, basename="notifications")
+router.register(r"notifications", NotificationsViewSet, basename="notifications")
 
 
 
@@ -17,6 +17,8 @@ urlpatterns = [
     path('visit-juornal/', VisitJuornalAPIView.as_view()),
     path('send-type/', SendTypeAPIView.as_view()),
     path('event-type/', EventTypeAPIView.as_view()),
-    #path('face-recognition', FaceRecognition),
-    path('video-presentation', VideoPresentation)
+    #path('control-points/', ControlPointAPIView.as_view()),
+   # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
+    path('face-recognition/', FaceRecognition),
+    path('video-presentation/', VideoPresentation)
 ]
