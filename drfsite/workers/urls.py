@@ -17,6 +17,7 @@ urlpatterns = [
     path('visit-juornal/', VisitJuornalAPIView.as_view()),
     path('send-type/', SendTypeAPIView.as_view()),
     path('event-type/', EventTypeAPIView.as_view()),
+    path('workers/updateImage/<int:pk>/', WorkerPostAPIView.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),
    # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
     path('face-recognition/', FaceRecognition),

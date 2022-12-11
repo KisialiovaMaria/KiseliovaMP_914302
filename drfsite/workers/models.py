@@ -67,7 +67,7 @@ class Worker(models.Model):
     positionID = models.ForeignKey(Position, on_delete=models.NOT_PROVIDED)
     departmentID = models.ForeignKey(Department, on_delete=models.NOT_PROVIDED)
     #photo = models.ForeignKey(Photo, on_delete=models.SET_NULL())
-    photo = models.ImageField(upload_to=worker_photo_directory_path)
+    photo = models.ImageField(upload_to=worker_photo_directory_path, null=True)
 
     def __str__(self):
         return self.name + self.surname

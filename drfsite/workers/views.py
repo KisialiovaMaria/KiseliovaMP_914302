@@ -1,6 +1,6 @@
 import threading
 import cv2
-from django.http import StreamingHttpResponse, JsonResponse
+from django.http import StreamingHttpResponse, JsonResponse, HttpResponse
 from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action, api_view
@@ -23,13 +23,10 @@ class WorkerViewSet(viewsets.ModelViewSet):  # предоставляет все
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
-    # def get_queryset(self):
-    #     return Worker.objects.all()[:3]
+class WorkerPostAPIView(generics.UpdateAPIView):
+    queryset = Worker.objects.all()
+    serializer_class = WorkerSerializer
 
-    # @action(methods=['get'], detail=True) # detail=True для одного False для всех
-    # def position(self, request, pk=None):
-    #     positions = Position.objects.get(pk=pk)
-    #     return Response({'cats':positions.name})
 
 class ControlPointViewSet(viewsets.ModelViewSet):
     queryset = ControlPoint.objects.all()
