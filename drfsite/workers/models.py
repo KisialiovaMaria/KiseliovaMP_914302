@@ -52,7 +52,12 @@ class Role(models.Model):
     def __str__(self):
         return self.rolename
 
-
+# class Photo(models.Model):
+#     photo = models.ImageField(upload_to=f"workers_images/")
+#     def __str__(self):
+#         return str(self.workerID)
+def worker_photo_directory_path(instance, filename):
+    return f'workers_images/{instance.id}/{filename}'
 class Worker(models.Model):
     name = models.CharField(max_length=20)
     surname = models.CharField(max_length=25)
@@ -61,17 +66,15 @@ class Worker(models.Model):
     email = models.CharField(max_length=25)
     positionID = models.ForeignKey(Position, on_delete=models.NOT_PROVIDED)
     departmentID = models.ForeignKey(Department, on_delete=models.NOT_PROVIDED)
+    #photo = models.ForeignKey(Photo, on_delete=models.SET_NULL())
+    photo = models.ImageField(upload_to=worker_photo_directory_path)
 
     def __str__(self):
         return self.name + self.surname
 
 
-class Photo(models.Model):
-    photo = models.ImageField()
-    workerID = models.ForeignKey(Worker, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return str(self.workerID)
+
 
 
 class PhotoBase(models.Model):

@@ -64,13 +64,13 @@ class WorkerSerializer(serializers.ModelSerializer):
         model = Worker
         fields = "__all__"
 
-
-class PhotoSerializer(serializers.ModelSerializer):
-    workerID = WorkerSerializer()
-
-    class Meta:
-        model = Photo
-        fields = "__all__"
+#
+# class PhotoSerializer(serializers.ModelSerializer):
+#     workerID = WorkerSerializer()
+#
+#     class Meta:
+#         model = Photo
+#         fields = "__all__"
 
 
 class PhotoBaseSerializer(serializers.ModelSerializer):

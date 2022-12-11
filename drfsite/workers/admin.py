@@ -7,7 +7,7 @@ admin.site.register(Department)
 admin.site.register(EventType)
 admin.site.register(SendType)
 admin.site.register(ControlPoint)
-admin.site.register(Photo)
+
 admin.site.register(PhotoBase)
 admin.site.register(VisitType)
 admin.site.register(Role)
