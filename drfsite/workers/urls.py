@@ -7,6 +7,7 @@ router = routers.SimpleRouter()
 router.register(r"workers", WorkerViewSet, basename="workers")
 router.register(r"control-points", ControlPointViewSet, basename="control-points")
 router.register(r"notifications", NotificationsViewSet, basename="notifications")
+router.register(r"control-list", ControlListViewSet, basename="control-list")
 
 
 
@@ -18,6 +19,7 @@ urlpatterns = [
     path('send-type/', SendTypeAPIView.as_view()),
     path('event-type/', EventTypeAPIView.as_view()),
     path('workers/updateImage/<int:pk>/', WorkerPostAPIView.as_view()),
+    path('control-list-of-worker/<int:pk>/', ControlListAPIViewByID.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),
    # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
     path('face-recognition/start/', FaceRecognitionStart),

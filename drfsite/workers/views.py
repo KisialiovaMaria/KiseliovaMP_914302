@@ -32,12 +32,20 @@ class ControlPointViewSet(viewsets.ModelViewSet):
     serializer_class = ControlPointSerializer
 
 
+class ControlListViewSet(viewsets.ModelViewSet):
+    queryset = ControlList.objects.all()
+    serializer_class = ControlListSerializer
 
-class PositionAPIView(generics.ListCreateAPIView):
+class ControlListAPIViewByID(generics.ListAPIView):
+    serializer_class = ControlListSerializer
+    def get_queryset(self):
+        queryset = ControlList.objects.filter(controlPoint_id=self.kwargs['pk'])
+        return queryset
+
+
+class PositionAPIView(generics.ListAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
-
-
 class DepartmentAPIView(generics.ListAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -192,10 +200,7 @@ def FaceRecognitionStop(request):
 #     serializer_class = CameraSerializer
 #
 #
-# class ControlListViewSet(viewsets.ModelViewSet):
-#     queryset = ControlList.objects.all()
-#     serializer_class = ControlListSerializer
-#
+
 #
 # class UserViewSet(viewsets.ModelViewSet):
 #     queryset = User.objects.all()

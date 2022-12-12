@@ -98,8 +98,8 @@ class ControlPointUpdateCameraSerializer(serializers.ModelSerializer):
 #
 
 class ControlListSerializer(serializers.ModelSerializer):
-    workerID = WorkerSerializer()
-    controlPointID = ControlPointSerializer()
+    worker = WorkerSerializer()
+    controlPoint = ControlPointSerializer()
     class Meta:
         model = ControlList
         fields = "__all__"
