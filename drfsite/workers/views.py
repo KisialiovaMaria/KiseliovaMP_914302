@@ -36,7 +36,7 @@ class ControlPointViewSet(viewsets.ModelViewSet):
 #     queryset = ControlList.objects.all()
 #     serializer_class = ControlListSerializer
 
-class ControlPointWholeAPIView(generics.ListAPIView):
+class ControlPointWholeViewSet(viewsets.ModelViewSet):
     queryset = ControlPoint.objects.all()
     serializer_class = ControlPointWholeSerializer
 
