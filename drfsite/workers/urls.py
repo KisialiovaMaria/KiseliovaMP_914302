@@ -23,7 +23,7 @@ urlpatterns = [
     #path('control-list-of-point/<int:pk>/', ControlListAPIViewByID.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),
    # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
-    path('face-recognition/start/', FaceRecognitionStart),
-    path('face-recognition/stop/', FaceRecognitionStop),
+    path('face-recognition/start/<int:pk>/', FaceRecognitionStart),
+    path('face-recognition/stop/<int:pk>/', FaceRecognitionStop),
    # path('video-presentation/', VideoPresentation),
 ]

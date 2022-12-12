@@ -94,14 +94,22 @@ class NotificationsViewSet(viewsets.ModelViewSet):
 FACE_RECOGNIZERS = []
 
 @api_view(['GET'])
-def FaceRecognitionStart(request):
+def FaceRecognitionStart(request, *args, **kwargs):
     """
     List all code snippets, or create a new snippet.
     """
 
     if request.method == 'GET':
+
+        workers = Worker.objects.filter(controlPoints__id=1)
+        images_paths = []
+        workers_ids = []
+        for worker in workers:
+
+            images_paths.append('./media/'+str(worker.photo))
+            workers_ids.append(worker.id)
         try:
-            fr = FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
+            fr = FaceRecognizer(images_paths, workers_ids)
             fr.start_recognition()
             FACE_RECOGNIZERS.append(fr)
 
@@ -109,7 +117,7 @@ def FaceRecognitionStart(request):
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
-def FaceRecognitionStop(request):
+def FaceRecognitionStop(request, *args, **kwargs):
     if request.method == 'GET':
         try:
             FACE_RECOGNIZERS[0].stop_recognition()
