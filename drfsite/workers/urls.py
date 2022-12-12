@@ -20,6 +20,7 @@ urlpatterns = [
     path('workers/updateImage/<int:pk>/', WorkerPostAPIView.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),
    # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
-    path('face-recognition/', FaceRecognition),
-    path('video-presentation/', VideoPresentation)
+    path('face-recognition/start/', FaceRecognitionStart),
+    path('face-recognition/stop/', FaceRecognitionStop),
+   # path('video-presentation/', VideoPresentation),
 ]

@@ -27,7 +27,7 @@ class FaceRecognizer(object):
         self.stop_flag_vr = False
         self.face_recognition_thread.start()
 
-    def stop_recognitnion(self):
+    def stop_recognition(self):
         self.stop_flag_fr = True
 
     def start_video_representing(self):
@@ -61,7 +61,6 @@ class FaceRecognizer(object):
         face_names = []
         process_this_frame = True
         while not self.stop_flag_fr:
-            print(self.stop_flag_fr)
             self.grabbed, frame = self.video_capture.read()
             # Only process every other frame of video to save time
             if process_this_frame:

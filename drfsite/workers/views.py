@@ -6,9 +6,8 @@ from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action, api_view
 from django.views.decorators import gzip
 from rest_framework.parsers import JSONParser
+from rest_framework.request import Request
 from rest_framework.response import Response
-
-import FR.face_recognition_block
 from FR.face_recognition_block import FaceRecognizer
 from .models import *
 from .Serializers import *
@@ -81,67 +80,95 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
 
+FACE_RECOGNIZERS = []
 
-@gzip.gzip_page
-def FaceRecognition(reqest):
-    try:
-        # cam = VideoCamera()
+@api_view(['GET'])
+def FaceRecognitionStart(request):
+    """
+    List all code snippets, or create a new snippet.
+    """
 
-        cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-        cam2.start_video_representing()
-        for _ in range(1000):
-            pass
-        print('stop')
-        cam2.stop_video_representing()
-        # gen(cam)
-        # cam2.start_recognition()
+    if request.method == 'GET':
+        try:
+            fr = FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
+            fr.start_recognition()
+            FACE_RECOGNIZERS.append(fr)
 
-        return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-                                     content_type='multipart/x-mixed-replace;boundary=frame')
-    except:
-        pass
-    return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
+            return Response({"status": "success"}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+def FaceRecognitionStop(request):
+    if request.method == 'GET':
+        try:
+            FACE_RECOGNIZERS[0].stop_recognition()
+            FACE_RECOGNIZERS.pop(0)
+            return Response({"status": "success"}, status=status.HTTP_201_CREATED)
+        except:
+            return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+# class FaceRecognitionStartView(Request):
+#
+#         try:
+#             # cam = VideoCamera()
+#
+#             FACE_RECOGNIZER = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
+#             # f_recognizer.start_video_representing()
+#             # f_recognizer.stop_video_representing()
+#             # gen(cam)
+#             FACE_RECOGNIZER.start_recognition()
+#
+#             # return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
+#             #                              content_type='multipart/x-mixed-replace;boundary=frame')
+#         except:
+#             pass
+#
+# def FaceRecognitionStopView(Request):
+#     try:
+#         FACE_RECOGNIZER.stop_recognition()
+#     except:
+#         pass
+#
 
-@gzip.gzip_page
-def VideoPresentation(reqest):
-    try:
-        # cam = VideoCamera()
-
-        cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-        cam2.start_video_representing()
-        for _ in range(1000):
-            pass
-        print('stop')
-        cam2.stop_video_representing()
-        # gen(cam)
-        # cam2.start_recognition()
-
-        return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-                                     content_type='multipart/x-mixed-replace;boundary=frame')
-    except:
-        pass
-    return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
-
-
-@gzip.gzip_page
-def Home(reqest):
-    try:
-        # cam = VideoCamera()
-
-        cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-        cam2.start_video_representing()
-        for _ in range(1000):
-            pass
-        print('stop')
-        cam2.stop_video_representing()
-        # gen(cam)
-        # cam2.start_recognition()
-
-        return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-                                     content_type='multipart/x-mixed-replace;boundary=frame')
-    except:
-        pass
-    return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
+# @gzip.gzip_page
+# def VideoPresentation(reqest):
+#     try:
+#         # cam = VideoCamera()
+#
+#         cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
+#         cam2.start_video_representing()
+#         for _ in range(1000):
+#             pass
+#         print('stop')
+#         cam2.stop_video_representing()
+#         # gen(cam)
+#         # cam2.start_recognition()
+#
+#         return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
+#                                      content_type='multipart/x-mixed-replace;boundary=frame')
+#     except:
+#         pass
+#     return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
+#
+#
+# @gzip.gzip_page
+# def Home(reqest):
+#     try:
+#         # cam = VideoCamera()
+#
+#         cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
+#         cam2.start_video_representing()
+#         for _ in range(1000):
+#             pass
+#         print('stop')
+#         cam2.stop_video_representing()
+#         # gen(cam)
+#         # cam2.start_recognition()
+#
+#         return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
+#                                      content_type='multipart/x-mixed-replace;boundary=frame')
+#     except:
+#         pass
+#     return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
 
 # @api_view(['GET'])
 # def fr_view(request):
