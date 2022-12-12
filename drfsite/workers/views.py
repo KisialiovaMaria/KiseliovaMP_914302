@@ -22,7 +22,7 @@ class WorkerViewSet(viewsets.ModelViewSet):  # предоставляет все
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
-class WorkerPostAPIView(generics.UpdateAPIView):
+class WorkerPutAPIView(generics.UpdateAPIView):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
@@ -32,15 +32,18 @@ class ControlPointViewSet(viewsets.ModelViewSet):
     serializer_class = ControlPointSerializer
 
 
-class ControlListViewSet(viewsets.ModelViewSet):
-    queryset = ControlList.objects.all()
-    serializer_class = ControlListSerializer
+# class ControlListViewSet(viewsets.ModelViewSet):
+#     queryset = ControlList.objects.all()
+#     serializer_class = ControlListSerializer
 
-class ControlListAPIViewByID(generics.ListAPIView):
-    serializer_class = ControlListSerializer
-    def get_queryset(self):
-        queryset = ControlList.objects.filter(controlPoint_id=self.kwargs['pk'])
-        return queryset
+class ControlPointWholeAPIView(generics.ListAPIView):
+    queryset = ControlPoint.objects.all()
+    serializer_class = ControlPointWholeSerializer
+
+
+
+class ControlListsUpdates(generics.UpdateAPIView):
+    pass
 
 
 class PositionAPIView(generics.ListAPIView):

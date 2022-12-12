@@ -85,7 +85,7 @@ class ControlPoint(models.Model):
     name = models.CharField(max_length=20)
     camera_name = models.CharField(max_length=20, default="fff")
     camera_activity = models.BooleanField(default=False)
-    workers = models.ManyToManyField(Worker, through="ControlList")
+    workers = models.ManyToManyField(Worker, related_name="controlPoints")
     def __str__(self):
         return self.name
 
@@ -99,14 +99,14 @@ class ControlPoint(models.Model):
 #         return self.name + self.ipAdress
 #
 
-class ControlList(models.Model):
-    worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
-    controlPoint = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('worker', 'controlPoint')
-    def __str__(self):
-        return self.controlPoint.__str__() + " --- "+self.worker.__str__()
+# class ControlList(models.Model):
+#     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
+#     controlPoint = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
+#
+#     class Meta:
+#         unique_together = ('worker', 'controlPoint')
+#     def __str__(self):
+#         return self.controlPoint.__str__() + " --- "+self.worker.__str__()
 
 
 class User(models.Model):
