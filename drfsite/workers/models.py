@@ -149,11 +149,15 @@ class VisitType(models.Model):
 
 
 class VisitJuornal(models.Model):
-    date = models.DateTimeField(auto_now=True)
+    date = models.DateField(auto_now=True)
+    time = models.TimeField(auto_now=True)
     personID = models.ForeignKey(Worker, on_delete=models.SET_NULL, null=True)
-    fixedPhotoID = models.ForeignKey(PhotoBase, on_delete=models.SET_NULL, null=True)
+    #fixedPhotoID = models.ForeignKey(PhotoBase, on_delete=models.SET_NULL, null=True, default=None)
     controlPointID = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
     visitTypeID = models.ForeignKey(VisitType, on_delete=models.NOT_PROVIDED)
 
     def __str__(self):
-        return self.date + self.personID + self.visitTypeID
+        if self.personID:
+            return str(self.date) + self.personID + self.visitTypeID
+        else:
+            return str(self.date) + "unknown" + self.visitTypeID

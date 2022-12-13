@@ -64,9 +64,13 @@ class EventTypeAPIView(generics.ListAPIView):
     serializer_class = EventTypeSerializer
 
 
-class VisitJuornalAPIView(generics.ListAPIView):
+class VisitJuornalAPIView(generics.ListCreateAPIView, generics.DestroyAPIView):
     queryset = VisitJuornal.objects.all()
     serializer_class = VisitJuornalSerializer
+
+class VisitJuornalWholeAPIView(generics.ListCreateAPIView, generics.DestroyAPIView):
+    queryset = VisitJuornal.objects.all()
+    serializer_class = VisitJuornalWholeSerializer
 
 
 # class ControlPointUpdateCameraActivityView(generics.UpdateAPIView):
@@ -101,15 +105,16 @@ def FaceRecognitionStart(request, *args, **kwargs):
 
     if request.method == 'GET':
 
-        workers = Worker.objects.filter(controlPoints__id=1)
-        images_paths = []
-        workers_ids = []
-        for worker in workers:
+        all_workers = Worker.objects.all()
+        all_workers_images_paths = []
+        all_workers_ids = []
+        for worker in all_workers:
+            if(worker.photo):
+                all_workers_images_paths.append('./media/'+str(worker.photo))
+                all_workers_ids.append(worker.id)
 
-            images_paths.append('./media/'+str(worker.photo))
-            workers_ids.append(worker.id)
         try:
-            fr = FaceRecognizer(images_paths, workers_ids)
+            fr = FaceRecognizer(all_workers_images_paths, all_workers_ids, kwargs['pk'])
             fr.start_recognition()
             FACE_RECOGNIZERS.append(fr)
 
@@ -223,11 +228,11 @@ def FaceRecognitionStop(request, *args, **kwargs):
 #     serializer_class = NotificationsSerializer
 #
 #
-# class VisitTypeAPIView(generics.ListAPIView):
-#     queryset = VisitType.objects.all()
-#     serializer_class = VisitTypeSerializer
-#
-#
+class VisitTypeAPIView(generics.ListAPIView):
+    queryset = VisitType.objects.all()
+    serializer_class = VisitTypeSerializer
+
+
 
 
 # наследуется от класса котрый определяет набор запросов которые можно использовать

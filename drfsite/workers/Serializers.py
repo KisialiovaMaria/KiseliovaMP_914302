@@ -148,15 +148,24 @@ class VisitTypeSerializer(serializers.ModelSerializer):
 
 
 class VisitJuornalSerializer(serializers.ModelSerializer):
+    personID = SlugRelatedField("id", queryset=Worker.objects.all(), allow_empty=True, allow_null=True)
+    #fixedPhotoID = PhotoBaseSerializer(allow_null=True)
+    controlPointID = SlugRelatedField("id", queryset=ControlPoint.objects.all())
+    visitTypeID = SlugRelatedField("visitTypeName", queryset=VisitType.objects.all())
+
+    class Meta:
+        model = VisitJuornal
+        fields = "__all__"
+
+class VisitJuornalWholeSerializer(serializers.ModelSerializer):
     personID = WorkerSerializer()
-    fixedPhotoID = PhotoBaseSerializer()
+    #fixedPhotoID = PhotoBaseSerializer(allow_null=True)
     controlPointID = ControlPointSerializer()
     visitTypeID = VisitTypeSerializer()
 
     class Meta:
         model = VisitJuornal
         fields = "__all__"
-
 # class WorkerSerializerSimple(serializers.Serializer):
 #     name = serializers.CharField()
 #     position = serializers.IntegerField()

@@ -3,6 +3,7 @@ import threading
 import face_recognition
 import cv2
 import numpy as np
+from workers.models import VisitJuornal, Worker, ControlPoint, VisitType
 
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
@@ -10,7 +11,8 @@ import numpy as np
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
 #   2. Only detect faces in every other frame of video.
 class FaceRecognizer(object):
-    def __init__(self, workers_images_paths, workers_names):
+    def __init__(self, workers_images_paths, workers_names, control_point_id):
+        self.control_point_id = control_point_id
         self.known_face_encodings = []
         self.images_paths = workers_images_paths
         self.known_face_names = workers_names
@@ -22,6 +24,10 @@ class FaceRecognizer(object):
         self.stop_flag_fr = False
         self.video_representing_thread = threading.Thread(target=self.update, args=())
         self.stop_flag_vr = False
+        accesed_workers = Worker.objects.filter(controlPoints__id=control_point_id)
+        self.accesed_workers_ids = []
+        for worker in accesed_workers:
+            self.accesed_workers_ids.append(worker.id)
 
     def start_recognition(self):
         self.stop_flag_vr = False
@@ -126,7 +132,25 @@ class FaceRecognizer(object):
         self.recognised_names.append(name)
 
         if len(self.recognised_names) == 10 and name == 'nobody' and self.recognised_names[-2] not in ['nobody']:
-            print(f'В комнату зашла {self.recognised_names[-2]}')
+            visitor_id = self.recognised_names[-2]
+            if visitor_id == "unknown":
+                visit_type=VisitType.objects.get(id="3")
+                worker = None
+            else:
+                worker = Worker.objects.get(id=visitor_id)
+                visit_type = check_visit_type(visitor_id, self.accesed_workers_ids)
+            controlPoint = ControlPoint.objects.get(id=self.control_point_id)
+            print(worker, controlPoint, visit_type)
+            visit = VisitJuornal(personID=worker, controlPointID=controlPoint, visitTypeID=visit_type)
+            visit.save()
+            # print(visit)
+            # print(f'В комнату зашла {self.recognised_names[-2]}')
+
+def check_visit_type(id, accesed_workers_ids):
+    if id in accesed_workers_ids:
+            return VisitType.objects.get(id="1")
+    else:
+        return VisitType.objects.get(id="2")
 
 
 # class VideoCamera(object):
