@@ -2,7 +2,7 @@ from django.db import models
 
 # Create your models here.
 # from rest_framework.authtoken.admin import User
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 
 
 # class Position(models.Model):

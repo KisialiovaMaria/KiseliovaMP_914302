@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from .views import *
 
 router = routers.SimpleRouter()
@@ -25,5 +25,8 @@ urlpatterns = [
    # path('control-points/camera/<id>', ControlPointUpdateCameraActivityView.as_view()),
     path('face-recognition/start/<int:pk>/', FaceRecognitionStart),
     path('face-recognition/stop/<int:pk>/', FaceRecognitionStop),
+    path('token/', TokenObtainPairView.as_view()),
+    path('token/refresh/', TokenRefreshView.as_view()),
+    path('token/verify/', TokenVerifyView.as_view()),
    # path('video-presentation/', VideoPresentation),
 ]

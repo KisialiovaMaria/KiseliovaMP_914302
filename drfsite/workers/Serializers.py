@@ -1,3 +1,4 @@
+import account as account
 from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField, SlugRelatedField
 
@@ -20,7 +21,6 @@ from .models import *
 #     class Meta:
 #         model = Worker
 #         fields = "__all__"
-
 
 class PositionSerializer(serializers.ModelSerializer):
     class Meta:
