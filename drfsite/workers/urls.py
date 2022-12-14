@@ -21,6 +21,7 @@ urlpatterns = [
     path('visit-type/', VisitTypeAPIView.as_view()),
     path('event-type/', EventTypeAPIView.as_view()),
     path('workers/updateImage/<int:pk>/', WorkerPutAPIView.as_view()),
+    path('workers/except-point/<int:pk>/', WorkerExceptListView.as_view()),
     #path('control-points-whole/',ControlPointWholeAPIView.as_view()),
     #path('control-list-of-point/<int:pk>/', ControlListAPIViewByID.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),

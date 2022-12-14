@@ -85,7 +85,7 @@ class ControlPoint(models.Model):
     name = models.CharField(max_length=20)
     camera_name = models.CharField(max_length=20, default="fff")
     camera_activity = models.BooleanField(default=False)
-    workers = models.ManyToManyField(Worker, related_name="controlPoints")
+    workers = models.ManyToManyField(Worker, related_name="controlPoints",blank=True)
     def __str__(self):
         return self.name
 

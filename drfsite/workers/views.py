@@ -4,6 +4,7 @@ from django.http import StreamingHttpResponse, JsonResponse, HttpResponse
 from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action, api_view
+from django.db.models import Q
 from django.views.decorators import gzip
 from rest_framework.parsers import JSONParser
 from rest_framework.request import Request
@@ -25,6 +26,21 @@ class WorkerViewSet(viewsets.ModelViewSet):  # предоставляет все
 class WorkerPutAPIView(generics.UpdateAPIView):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
+
+class WorkerExceptListView(generics.ListAPIView):
+    # queryset = Worker.objects.filter(controlPoints = 1)
+    serializer_class = WorkerSerializer
+
+    def get_queryset(self):
+        """
+        This view should return a list of all the purchases for
+        the user as determined by the username portion of the URL.
+        """
+        id = self.kwargs['pk']
+        return Worker.objects.filter(~Q(controlPoints=id))
+    # def get(self, *args, **kwargs):
+    #     ControlPointID = kwargs['pk']
+    #     return Worker.objects.filter(controlPoints = ControlPointID)
 
 
 class ControlPointViewSet(viewsets.ModelViewSet):

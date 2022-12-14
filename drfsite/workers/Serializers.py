@@ -79,7 +79,7 @@ class ControlPointSerializer(serializers.ModelSerializer):
 
 
 class ControlPointWholeSerializer(serializers.ModelSerializer):
-    workers = WorkerSerializer(many=True, read_only=True)
+    workers = WorkerSerializer(many=True)
     #workers = SlugRelatedField("id", queryset=Worker.objects.all())
     class Meta:
         model = ControlPoint
