@@ -2,11 +2,13 @@ import threading
 import cv2
 from django.http import StreamingHttpResponse, JsonResponse, HttpResponse
 from django.shortcuts import render
+from dns.transaction import ReadOnly
 from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action, api_view
 from django.db.models import Q
 from django.views.decorators import gzip
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from FR.face_recognition_block import FaceRecognizer
@@ -18,7 +20,6 @@ from .Serializers import *
 
 
 # APIView готовое
-
 class WorkerViewSet(viewsets.ModelViewSet):  # предоставляет все CRUD
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
@@ -48,19 +49,9 @@ class ControlPointViewSet(viewsets.ModelViewSet):
     serializer_class = ControlPointSerializer
 
 
-# class ControlListViewSet(viewsets.ModelViewSet):
-#     queryset = ControlList.objects.all()
-#     serializer_class = ControlListSerializer
-
 class ControlPointWholeViewSet(viewsets.ModelViewSet):
     queryset = ControlPoint.objects.all()
     serializer_class = ControlPointWholeSerializer
-
-
-
-class ControlListsUpdates(generics.UpdateAPIView):
-    pass
-
 
 class PositionAPIView(generics.ListAPIView):
     queryset = Position.objects.all()
@@ -89,23 +80,22 @@ class VisitJuornalWholeAPIView(generics.ListCreateAPIView, generics.DestroyAPIVi
     serializer_class = VisitJuornalWholeSerializer
 
 
-# class ControlPointUpdateCameraActivityView(generics.UpdateAPIView):
-#     serializer_class = ControlPointUpdateCameraSerializer
-#     queryset = VisitJuornal.objects.all()
-#     def put(self, request, *args, **kwargs):
-#         tutorial_data = JSONParser().parse(request)
-#         tutorial_serializer = ControlPointUpdateCameraSerializer(ControlPoint, data=tutorial_data)
-#         if tutorial_serializer.is_valid():
-#             tutorial_serializer.save()
-#             return JsonResponse(tutorial_serializer.data)
-#         return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
+class TodoSerializer:
+    pass
 
 
-# class CameraViewSet(viewsets.ModelViewSet):  # предоставляет все CRUD
-#     queryset = Camera.objects.all()
-#     serializer_class = CameraSerializer
+class UserFindAPIView(generics.ListAPIView):
+    #queryset = User.objects.filter(username='masha')
+    serializer_class = UserSerializer
+    permission_classes = [AllowAny]
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return User.objects.filter(username=username)
 
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()

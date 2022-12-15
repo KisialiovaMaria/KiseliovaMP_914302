@@ -8,6 +8,7 @@ router.register(r"workers", WorkerViewSet, basename="workers")
 router.register(r"control-points", ControlPointViewSet, basename="control-points")
 router.register(r"notifications", NotificationsViewSet, basename="notifications")
 router.register(r"control-points-whole", ControlPointWholeViewSet, basename="control-points-whole")
+router.register(r"users", UserViewSet, basename="user")
 
 
 
@@ -22,6 +23,7 @@ urlpatterns = [
     path('event-type/', EventTypeAPIView.as_view()),
     path('workers/updateImage/<int:pk>/', WorkerPutAPIView.as_view()),
     path('workers/except-point/<int:pk>/', WorkerExceptListView.as_view()),
+    path('finduser/<str:username>/', UserFindAPIView.as_view()),
     #path('control-points-whole/',ControlPointWholeAPIView.as_view()),
     #path('control-list-of-point/<int:pk>/', ControlListAPIViewByID.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),

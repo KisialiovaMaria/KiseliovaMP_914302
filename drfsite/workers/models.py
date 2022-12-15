@@ -109,36 +109,36 @@ class ControlPoint(models.Model):
 #         return self.controlPoint.__str__() + " --- "+self.worker.__str__()
 
 
-class User(models.Model):
-    login = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-    activity = models.BooleanField()
-    roleID = models.ForeignKey(Role, on_delete=models.NOT_PROVIDED)
-    workerID = models.ForeignKey(Worker, on_delete=models.NOT_PROVIDED)
-
-    def __str__(self):
-        return self.login + self.password
+# class User(models.Model):
+#     login = models.CharField(max_length=20)
+#     password = models.CharField(max_length=20)
+#     activity = models.BooleanField()
+#     roleID = models.ForeignKey(Role, on_delete=models.NOT_PROVIDED)
+#     workerID = models.ForeignKey(Worker, on_delete=models.NOT_PROVIDED)
+#
+#     def __str__(self):
+#         return self.login + self.password
 
 
 class Notifications(models.Model):
     sendTypeID = models.ForeignKey(SendType, on_delete=models.CASCADE)
     eventTypeID = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    #userID = models.ForeignKey(User, on_delete=models.CASCADE)
     activity = models.BooleanField(null=True)
 
     def __str__(self):
         return self.sendTypeID + self.eventTypeID + self.userID
 
 
-class Report(models.Model):
-    title = models.CharField(max_length=20)
-    periodFrom = models.DateField()
-    periodTo = models.DateField()
-    authID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    text = models.CharField(max_length=400)
-
-    def __str__(self):
-        return self.title
+# class Report(models.Model):
+#     title = models.CharField(max_length=20)
+#     periodFrom = models.DateField()
+#     periodTo = models.DateField()
+#     #authID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+#     text = models.CharField(max_length=400)
+#
+#     def __str__(self):
+#         return self.title
 
 
 class VisitType(models.Model):

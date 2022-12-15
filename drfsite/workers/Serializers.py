@@ -125,13 +125,24 @@ class ControlPointUpdateCameraSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    roleID = RoleSerializer()
-    workerID = WorkerSerializer()
+    # roleID = RoleSerializer()
+    # workerID = WorkerSerializer()
+    #password = serializers.CharField(write_only=True)
 
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email'],
+            is_active=True,
+        )
+        return user
     class Meta:
         model = User
-        fields = "__all__"
-
+        fields = ["id", "password", "username", "first_name", "last_name", "email", "is_superuser", "is_active"]
+        #fields = "__all__"
 
 class NotificationsSerializer(serializers.ModelSerializer):
     userID = UserSerializer()
