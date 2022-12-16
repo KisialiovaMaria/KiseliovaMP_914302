@@ -4,7 +4,7 @@ import face_recognition
 import cv2
 import numpy as np
 from workers.models import VisitJuornal, Worker, ControlPoint, VisitType
-
+from notifications.mail import sendNotifications
 
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
@@ -142,9 +142,10 @@ class FaceRecognizer(object):
             controlPoint = ControlPoint.objects.get(id=self.control_point_id)
             print(worker, controlPoint, visit_type)
             visit = VisitJuornal(personID=worker, controlPointID=controlPoint, visitTypeID=visit_type)
+            sendNotifications(controlPoint, visit_type)
             visit.save()
             # print(visit)
-            # print(f'В комнату зашла {self.recognised_names[-2]}')
+            print(f'Посещение {self.recognised_names[-2]}')
 
 def check_visit_type(id, accesed_workers_ids):
     if id in accesed_workers_ids:
