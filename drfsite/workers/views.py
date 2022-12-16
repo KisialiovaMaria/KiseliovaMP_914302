@@ -1,4 +1,6 @@
 import threading
+from datetime import time
+
 import cv2
 from django.http import StreamingHttpResponse, JsonResponse, HttpResponse
 from django.shortcuts import render
@@ -7,11 +9,12 @@ from rest_framework import generics, viewsets, status
 from rest_framework.decorators import action, api_view
 from django.db.models import Q
 from django.views.decorators import gzip
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
-from FR.face_recognition_block import FaceRecognizer
+from FR.face_recognition_block import FaceRecognizer, gen
 from .models import *
 from .Serializers import *
 
@@ -71,6 +74,15 @@ class EventTypeAPIView(generics.ListAPIView):
     serializer_class = EventTypeSerializer
 
 
+class JuornalAPIListPagination(PageNumberPagination):
+    page_size = 10
+    page_query_param = 'page_size'
+    max_page_size = 1000
+class JuornalAPIListView(generics.ListAPIView):
+    queryset = VisitJuornal.objects.all()
+    serializer_class = VisitJuornalWholeSerializer
+    pagination_class = JuornalAPIListPagination
+
 class VisitJuornalAPIView(generics.ListCreateAPIView, generics.DestroyAPIView):
     queryset = VisitJuornal.objects.all()
     serializer_class = VisitJuornalSerializer
@@ -111,9 +123,6 @@ FACE_RECOGNIZERS = []
 
 @api_view(['GET'])
 def FaceRecognitionStart(request, *args, **kwargs):
-    """
-    List all code snippets, or create a new snippet.
-    """
 
     if request.method == 'GET':
 
@@ -142,6 +151,23 @@ def FaceRecognitionStop(request, *args, **kwargs):
             return Response({"status": "success"}, status=status.HTTP_201_CREATED)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def VideoTranslationnStart(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            # f_recognizer.start_video_representing()
+            # f_recognizer.stop_video_representing()
+            # gen(cam)
+            #FACE_RECOGNIZERS[0].stop_video_representing()
+            FACE_RECOGNIZERS[0].start_video_representing()
+
+
+            return StreamingHttpResponse(gen(FACE_RECOGNIZERS[0]),
+                                         content_type='multipart/x-mixed-replace;boundary=frame')
+        except:
+            return Response({"error": "((("})
+
 # class FaceRecognitionStartView(Request):
 #
 #         try:

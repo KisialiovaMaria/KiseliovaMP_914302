@@ -114,12 +114,6 @@ class FaceRecognizer(object):
                     cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
                     font = cv2.FONT_HERSHEY_DUPLEX
                     cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                    # Display the resulting image
-                    # cv2.imshow('Video', self.frame)
-
-                    # Hit 'q' on the keyboard to quit!
-                    # if cv2.waitKey(1) & 0xFF == ord('q'):
-                    #     break
                 return frame
 
         # Release handle to the webcam
@@ -146,6 +140,7 @@ class FaceRecognizer(object):
             visit.save()
             # print(visit)
             print(f'Посещение {self.recognised_names[-2]}')
+            self.recognised_names = []
 
 def check_visit_type(id, accesed_workers_ids):
     if id in accesed_workers_ids:
@@ -153,25 +148,8 @@ def check_visit_type(id, accesed_workers_ids):
     else:
         return VisitType.objects.get(id="2")
 
-
-# class VideoCamera(object):
-#     def __init__(self):
-#         self.video = cv2.VideoCapture(0)
-#         (self.grabbed, self.frame) = self.video.read()
-#         threading.Thread(target=self.update, args=()).start()
-#
-#     def __del__(self):
-#         self.video.release()
-#
-#     def get_frame(self):
-#         image = self.frame
-#         _, jpeg = cv2.imencode('.jpg', image)
-#         return jpeg.tobytes()
-#
-#     def update(self):
-#         while True:
-#             (self.grabbed, self.frame) = self.video.read()
-#
+op = [1,2,2,2,3,0]
+op
 
 def gen(camera):
     while True:
