@@ -144,17 +144,26 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ["id", "password", "username", "first_name", "last_name", "email", "is_superuser", "is_active"]
         #fields = "__all__"
 
-class NotificationsSerializer(serializers.ModelSerializer):
-    userID = UserSerializer()
-
-    class Meta:
-        model = Notifications
-        fields = "__all__"
-
 
 class VisitTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = VisitType
+        fields = "__all__"
+class NotificationsSerializer(serializers.ModelSerializer):
+    userID = SlugRelatedField("username", queryset=User.objects.all(), allow_null=True)
+    eventType = SlugRelatedField("eventType", queryset=EventType.objects.all())
+    controlPoint = SlugRelatedField("name", queryset=ControlPoint.objects.all())
+
+    class Meta:
+        model = Notifications
+        fields = "__all__"
+class NotificationsWholeSerializer(serializers.ModelSerializer):
+    userID = UserSerializer()
+    eventType = EventTypeSerializer()
+    controlPoint = ControlPointSerializer()
+
+    class Meta:
+        model = Notifications
         fields = "__all__"
 
 

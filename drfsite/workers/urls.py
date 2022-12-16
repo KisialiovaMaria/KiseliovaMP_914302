@@ -24,6 +24,7 @@ urlpatterns = [
     path('workers/updateImage/<int:pk>/', WorkerPutAPIView.as_view()),
     path('workers/except-point/<int:pk>/', WorkerExceptListView.as_view()),
     path('finduser/<str:username>/', UserFindAPIView.as_view()),
+    path('user-notifications/<int:pk>/', NotificationsByUserAPIListView.as_view()),
     #path('control-points-whole/',ControlPointWholeAPIView.as_view()),
     #path('control-list-of-point/<int:pk>/', ControlListAPIViewByID.as_view()),
     #path('control-points/', ControlPointAPIView.as_view()),

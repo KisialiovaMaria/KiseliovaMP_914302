@@ -101,6 +101,12 @@ class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
 
+class NotificationsByUserAPIListView(generics.ListAPIView):
+    serializer_class = NotificationsSerializer
+    def get_queryset(self):
+        username = self.kwargs['pk']
+        return Notifications.objects.filter(userID=username)
+
 FACE_RECOGNIZERS = []
 
 @api_view(['GET'])

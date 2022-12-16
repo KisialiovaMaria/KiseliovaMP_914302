@@ -119,15 +119,22 @@ class ControlPoint(models.Model):
 #     def __str__(self):
 #         return self.login + self.password
 
-
-class Notifications(models.Model):
-    sendTypeID = models.ForeignKey(SendType, on_delete=models.CASCADE)
-    eventTypeID = models.ForeignKey(EventType, on_delete=models.CASCADE)
-    #userID = models.ForeignKey(User, on_delete=models.CASCADE)
-    activity = models.BooleanField(null=True)
+class VisitType(models.Model):
+    visitTypeName = models.CharField(max_length=40)
 
     def __str__(self):
-        return self.sendTypeID + self.eventTypeID + self.userID
+        return self.visitTypeName
+class Notifications(models.Model):
+    #sendTypeID = models.ForeignKey(SendType, on_delete=models.CASCADE)
+    eventType = models.ForeignKey(EventType, on_delete=models.CASCADE,null=True)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    activity = models.BooleanField(default=False)
+    controlPoint = models.ForeignKey(ControlPoint, on_delete=models.CASCADE,null=True)
+
+    class Meta:
+        unique_together = ('userID', 'eventType', 'controlPoint')
+    def __str__(self):
+        return str(self.eventType) + str(self.userID)
 
 
 # class Report(models.Model):
@@ -141,11 +148,7 @@ class Notifications(models.Model):
 #         return self.title
 
 
-class VisitType(models.Model):
-    visitTypeName = models.CharField(max_length=20)
 
-    def __str__(self):
-        return self.visitTypeName
 
 
 class VisitJuornal(models.Model):
