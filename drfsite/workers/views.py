@@ -27,9 +27,11 @@ class WorkerViewSet(viewsets.ModelViewSet):  # предоставляет все
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
+
 class WorkerPutAPIView(generics.UpdateAPIView):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
+
 
 class WorkerExceptListView(generics.ListAPIView):
     # queryset = Worker.objects.filter(controlPoints = 1)
@@ -56,9 +58,12 @@ class ControlPointWholeViewSet(viewsets.ModelViewSet):
     queryset = ControlPoint.objects.all()
     serializer_class = ControlPointWholeSerializer
 
+
 class PositionAPIView(generics.ListAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionSerializer
+
+
 class DepartmentAPIView(generics.ListAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -78,14 +83,18 @@ class JuornalAPIListPagination(PageNumberPagination):
     page_size = 10
     page_query_param = 'page_size'
     max_page_size = 1000
+
+
 class JuornalAPIListView(generics.ListAPIView):
     queryset = VisitJuornal.objects.all()
     serializer_class = VisitJuornalWholeSerializer
     pagination_class = JuornalAPIListPagination
 
+
 class VisitJuornalAPIView(generics.ListCreateAPIView, generics.DestroyAPIView):
     queryset = VisitJuornal.objects.all()
     serializer_class = VisitJuornalSerializer
+
 
 class VisitJuornalWholeAPIView(generics.ListCreateAPIView, generics.DestroyAPIView):
     queryset = VisitJuornal.objects.all()
@@ -102,36 +111,41 @@ class TodoSerializer:
 
 
 class UserFindAPIView(generics.ListAPIView):
-    #queryset = User.objects.filter(username='masha')
+    # queryset = User.objects.filter(username='masha')
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+
     def get_queryset(self):
         username = self.kwargs['username']
         return User.objects.filter(username=username)
+
 
 class NotificationsViewSet(viewsets.ModelViewSet):
     queryset = Notifications.objects.all()
     serializer_class = NotificationsSerializer
 
+
 class NotificationsByUserAPIListView(generics.ListAPIView):
     serializer_class = NotificationsSerializer
+
     def get_queryset(self):
         username = self.kwargs['pk']
         return Notifications.objects.filter(userID=username)
 
+
 FACE_RECOGNIZERS = []
+
 
 @api_view(['GET'])
 def FaceRecognitionStart(request, *args, **kwargs):
-
     if request.method == 'GET':
 
         all_workers = Worker.objects.all()
         all_workers_images_paths = []
         all_workers_ids = []
         for worker in all_workers:
-            if(worker.photo):
-                all_workers_images_paths.append('./media/'+str(worker.photo))
+            if (worker.photo):
+                all_workers_images_paths.append('./media/' + str(worker.photo))
                 all_workers_ids.append(worker.id)
 
         try:
@@ -142,6 +156,8 @@ def FaceRecognitionStart(request, *args, **kwargs):
             return Response({"status": "success"}, status=status.HTTP_201_CREATED)
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 def FaceRecognitionStop(request, *args, **kwargs):
     if request.method == 'GET':
@@ -152,6 +168,7 @@ def FaceRecognitionStop(request, *args, **kwargs):
         except:
             return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def VideoTranslationnStart(request, *args, **kwargs):
     if request.method == 'GET':
@@ -159,14 +176,14 @@ def VideoTranslationnStart(request, *args, **kwargs):
             # f_recognizer.start_video_representing()
             # f_recognizer.stop_video_representing()
             # gen(cam)
-            #FACE_RECOGNIZERS[0].stop_video_representing()
+            # FACE_RECOGNIZERS[0].stop_video_representing()
             FACE_RECOGNIZERS[0].start_video_representing()
-
 
             return StreamingHttpResponse(gen(FACE_RECOGNIZERS[0]),
                                          content_type='multipart/x-mixed-replace;boundary=frame')
         except:
             return Response({"error": "((("})
+
 
 # class FaceRecognitionStartView(Request):
 #
@@ -269,9 +286,6 @@ def VideoTranslationnStart(request, *args, **kwargs):
 class VisitTypeAPIView(generics.ListAPIView):
     queryset = VisitType.objects.all()
     serializer_class = VisitTypeSerializer
-
-
-
 
 # наследуется от класса котрый определяет набор запросов которые можно использовать
 # class WorkerAPIList(generics.ListCreateAPIView):
