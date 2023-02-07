@@ -6,6 +6,7 @@ import numpy as np
 from workers.models import VisitJuornal, Worker, ControlPoint, VisitType
 from notifications.mail import sendNotifications
 
+
 # This is a demo of running face recognition on live video from your webcam. It's a little more complicated than the
 # other example, but it includes some basic performance tweaks to make things run a lot faster:
 #   1. Process each video frame at 1/4 resolution (though still display it at full resolution)
@@ -63,8 +64,6 @@ class FaceRecognizer(object):
     def recognition(self):
 
         # Initialize some variables
-        face_locations = []
-        face_names = []
         process_this_frame = True
         while not self.stop_flag_fr:
             self.grabbed, frame = self.video_capture.read()
@@ -128,28 +127,27 @@ class FaceRecognizer(object):
         if len(self.recognised_names) == 10 and name == 'nobody' and self.recognised_names[-2] not in ['nobody']:
             visitor_id = self.recognised_names[-2]
             if visitor_id == "unknown":
-                visit_type=VisitType.objects.get(id="3")
+                visit_type = VisitType.objects.get(id="3")
                 worker = None
             else:
                 worker = Worker.objects.get(id=visitor_id)
                 visit_type = check_visit_type(visitor_id, self.accesed_workers_ids)
-            controlPoint = ControlPoint.objects.get(id=self.control_point_id)
-            print(worker, controlPoint, visit_type)
-            visit = VisitJuornal(personID=worker, controlPointID=controlPoint, visitTypeID=visit_type)
-            sendNotifications(controlPoint, visit_type)
+            control_point = ControlPoint.objects.get(id=self.control_point_id)
+            print(worker, control_point, visit_type)
+            visit = VisitJuornal(personID=worker, controlPointID=control_point, visitTypeID=visit_type)
+            sendNotifications(control_point, visit_type)
             visit.save()
             # print(visit)
             print(f'Посещение {self.recognised_names[-2]}')
             self.recognised_names = []
 
+
 def check_visit_type(id, accesed_workers_ids):
     if id in accesed_workers_ids:
-            return VisitType.objects.get(id="1")
+        return VisitType.objects.get(id="1")
     else:
         return VisitType.objects.get(id="2")
 
-op = [1,2,2,2,3,0]
-op
 
 def gen(camera):
     while True:
