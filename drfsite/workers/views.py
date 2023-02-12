@@ -173,10 +173,6 @@ def FaceRecognitionStop(request, *args, **kwargs):
 def VideoTranslationnStart(request, *args, **kwargs):
     if request.method == 'GET':
         try:
-            # f_recognizer.start_video_representing()
-            # f_recognizer.stop_video_representing()
-            # gen(cam)
-            # FACE_RECOGNIZERS[0].stop_video_representing()
             FACE_RECOGNIZERS[0].start_video_representing()
 
             return StreamingHttpResponse(gen(FACE_RECOGNIZERS[0]),
@@ -185,113 +181,9 @@ def VideoTranslationnStart(request, *args, **kwargs):
             return Response({"error": "((("})
 
 
-# class FaceRecognitionStartView(Request):
-#
-#         try:
-#             # cam = VideoCamera()
-#
-#             FACE_RECOGNIZER = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-#             # f_recognizer.start_video_representing()
-#             # f_recognizer.stop_video_representing()
-#             # gen(cam)
-#             FACE_RECOGNIZER.start_recognition()
-#
-#             # return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-#             #                              content_type='multipart/x-mixed-replace;boundary=frame')
-#         except:
-#             pass
-#
-# def FaceRecognitionStopView(Request):
-#     try:
-#         FACE_RECOGNIZER.stop_recognition()
-#     except:
-#         pass
-#
 
-# @gzip.gzip_page
-# def VideoPresentation(reqest):
-#     try:
-#         # cam = VideoCamera()
-#
-#         cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-#         cam2.start_video_representing()
-#         for _ in range(1000):
-#             pass
-#         print('stop')
-#         cam2.stop_video_representing()
-#         # gen(cam)
-#         # cam2.start_recognition()
-#
-#         return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-#                                      content_type='multipart/x-mixed-replace;boundary=frame')
-#     except:
-#         pass
-#     return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
-#
-#
-# @gzip.gzip_page
-# def Home(reqest):
-#     try:
-#         # cam = VideoCamera()
-#
-#         cam2 = FR.face_recognition_block.FaceRecognizer(['./FR/images/masha.png', './FR/images/obama.png'], ['1', '2'])
-#         cam2.start_video_representing()
-#         for _ in range(1000):
-#             pass
-#         print('stop')
-#         cam2.stop_video_representing()
-#         # gen(cam)
-#         # cam2.start_recognition()
-#
-#         return StreamingHttpResponse(FR.face_recognition_block.gen(cam2),
-#                                      content_type='multipart/x-mixed-replace;boundary=frame')
-#     except:
-#         pass
-#     return render(reqest, 'C:/Users/masha/PycharmProjects/rest_api_workers/drfsite/workers/workers.html')
-
-# @api_view(['GET'])
-# def fr_view(request):
-#     video_capture = cv2.VideoCapture(0)
-#     known_face_names = [
-#         "Barack Obama",
-#         "Masha Kiseliova"
-#     ]
-#     recogn = FaceRecognizer(video_capture, ['./FR/images/obama.png', './FR/images/masha.png'], known_face_names)
-#     recogn.start_recognition()
-
-# class PhotoBaseViewSet(viewsets.ModelViewSet):
-#     queryset = PhotoBase.objects.all()
-#     serializer_class = PhotoSerializer
-#
-#
-
-#
-# class CameraAPIViewDeleteCreate(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
-#     queryset = Camera.objects.all()
-#     serializer_class = CameraSerializer
-#
-#
-
-#
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#
-#
-# class NotificationsViewSet(viewsets.ModelViewSet):
-#     queryset = Notifications.objects.all()
-#     serializer_class = NotificationsSerializer
-#
-#
 class VisitTypeAPIView(generics.ListAPIView):
     queryset = VisitType.objects.all()
     serializer_class = VisitTypeSerializer
 
-# наследуется от класса котрый определяет набор запросов которые можно использовать
-# class WorkerAPIList(generics.ListCreateAPIView):
-#     queryset = Worker.objects.all() # данные которые будут возвращаться по эапросу
-#     serializer_class = WorkerSerializer # класс, который обрабатывает этот queryser
-#
-# class WorkerAPIUpdate(generics.UpdateAPIView):
-#     queryset = Worker.objects.all()
-#     serializer_class = WorkerSerializer
+

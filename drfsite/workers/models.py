@@ -64,8 +64,8 @@ class Worker(models.Model):
     patronymic = models.CharField(max_length=20)
     phone = models.IntegerField()
     email = models.CharField(max_length=25)
-    positionID = models.ForeignKey(Position, on_delete=models.NOT_PROVIDED)
-    departmentID = models.ForeignKey(Department, on_delete=models.NOT_PROVIDED)
+    position = models.ForeignKey(Position, on_delete=models.NOT_PROVIDED)
+    department = models.ForeignKey(Department, on_delete=models.NOT_PROVIDED)
     #photo = models.ForeignKey(Photo, on_delete=models.SET_NULL())
     photo = models.ImageField(upload_to=worker_photo_directory_path, null=True)
 
@@ -127,14 +127,14 @@ class VisitType(models.Model):
 class Notifications(models.Model):
     #sendTypeID = models.ForeignKey(SendType, on_delete=models.CASCADE)
     eventType = models.ForeignKey(EventType, on_delete=models.CASCADE,null=True)
-    userID = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     activity = models.BooleanField(default=False)
     controlPoint = models.ForeignKey(ControlPoint, on_delete=models.CASCADE,null=True)
 
     class Meta:
-        unique_together = ('userID', 'eventType', 'controlPoint')
+        unique_together = ('user', 'eventType', 'controlPoint')
     def __str__(self):
-        return str(self.eventType) + str(self.userID)
+        return str(self.eventType) + str(self.user)
 
 
 # class Report(models.Model):
@@ -154,13 +154,13 @@ class Notifications(models.Model):
 class VisitJuornal(models.Model):
     date = models.DateField(auto_now=True)
     time = models.TimeField(auto_now=True)
-    personID = models.ForeignKey(Worker, on_delete=models.SET_NULL, null=True)
+    person = models.ForeignKey(Worker, on_delete=models.SET_NULL, null=True)
     #fixedPhotoID = models.ForeignKey(PhotoBase, on_delete=models.SET_NULL, null=True, default=None)
-    controlPointID = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
-    visitTypeID = models.ForeignKey(VisitType, on_delete=models.NOT_PROVIDED)
+    controlPoint = models.ForeignKey(ControlPoint, on_delete=models.CASCADE)
+    visitType = models.ForeignKey(VisitType, on_delete=models.NOT_PROVIDED)
 
     def __str__(self):
-        if self.personID:
-            return str(self.date) + self.personID + self.visitTypeID
+        if self.person:
+            return str(self.date) + self.person + self.visitType
         else:
-            return str(self.date) + "unknown" + self.visitTypeID
+            return str(self.date) + "unknown" + self.visitType
