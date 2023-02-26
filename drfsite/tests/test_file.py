@@ -34,6 +34,7 @@ class WorkerTests(APITestCase):
     def test_list_worker(self):
         url = "/api/v1/workers/"
         response = self.client.get(path=url)
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_update_worker(self):
@@ -51,6 +52,7 @@ class WorkerTests(APITestCase):
             ]
         }
         response = self.client.put(path=url, data=json.dumps(data), content_type="application/json")
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Worker.objects.count(), 1)
         self.assertEqual(Worker.objects.get().name, 'Мария4')
@@ -70,6 +72,7 @@ class WorkerTests(APITestCase):
             ]
         }
         response = self.client.patch(path=url, data=json.dumps(data), content_type="application/json")
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Worker.objects.count(), 1)
         self.assertEqual(Worker.objects.get().controlPoints.count(), 1)
@@ -78,6 +81,7 @@ class WorkerTests(APITestCase):
         id = Worker.objects.get().id
         url = f"/api/v1/workers/{id}/"
         response = self.client.delete(path=url)
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Worker.objects.count(), 0)
 
@@ -96,6 +100,7 @@ class WorkerTests(APITestCase):
             ]
         }
         response = self.client.post(path=url, data=json.dumps(data), content_type='application/json')
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Worker.objects.count(), 1)
         self.assertEqual(Worker.objects.get().name, 'Мария2')
@@ -150,5 +155,114 @@ class NotificationsTests(APITestCase):
         notification_id = Notifications.objects.get().id
         url = f"/api/v1/notifications/{notification_id}/"
         response = self.client.delete(path=url)
+        print(response)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Notifications.objects.count(), 0)
+
+class JuornalTests(APITestCase):
+    def setUp(self):
+        Department.objects.create(departmentName="test")
+        Position.objects.create(positionName="test")
+        User.objects.create(username="username", password="pass")
+        ControlPoint.objects.create(name="test")
+        VisitType.objects.create(visitTypeName="test_type")
+        self.add_test_worker()
+        self.add_visit()
+        user = User.objects.get(username='username')
+        self.client.force_authenticate(user=user)
+    def add_test_worker(self):
+        new_worker = Worker(
+            name="Name",
+            surname="Surname",
+            patronymic="Pat",
+            phone=3445885,
+            email="ginga@mail.ru",
+            department=Department.objects.all()[0],
+            position=Position.objects.all()[0]
+        )
+        new_worker.save()
+
+
+    def add_visit(self):
+        visit = VisitJuornal(
+            person=Worker.objects.get(),
+            controlPoint=ControlPoint.objects.get(),
+            visitType=VisitType.objects.get(),
+        )
+        visit.save()
+    def test_list_juornal(self):
+        url = "/api/v1/visit-juornal/"
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class ControlPointsTests(APITestCase):
+    def setUp(self):
+        ControlPoint.objects.create(name="test")
+        User.objects.create(username="username", password="pass")
+        Department.objects.create(departmentName="test")
+        Position.objects.create(positionName="test")
+        self.add_test_worker()
+        user = User.objects.get(username='username')
+        self.client.force_authenticate(user=user)
+
+    def add_test_worker(self):
+        new_worker = Worker(
+            name="Name",
+            surname="Surname",
+            patronymic="Pat",
+            phone=3445885,
+            email="ginga@mail.ru",
+            department=Department.objects.all()[0],
+            position=Position.objects.all()[0]
+        )
+        new_worker.save()
+
+    def test_create_control_point(self):
+        ControlPoint.objects.all().delete()
+        url = f"/api/v1/control-points/"
+        data = {
+            "name": "test",
+            "camera_activity": False,
+            "camera_name": "test",
+            "workers": []
+        }
+        response = self.client.post(path=url, data=json.dumps(data), content_type="application/json")
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(ControlPoint.objects.count(), 1)
+        self.assertEqual(ControlPoint.objects.get().name, "test")
+        self.assertEqual(ControlPoint.objects.get().camera_activity, False)
+        self.assertEqual(ControlPoint.objects.get().camera_name, "test")
+
+        pass
+
+    def test_delete_control_point(self):
+        control_point_id = ControlPoint.objects.get().id
+        url = f"/api/v1/control-points/{control_point_id}/"
+        response = self.client.delete(path=url)
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(ControlPoint.objects.count(), 0)
+
+    def test_activate_face_recognition(self):
+        control_point_id = ControlPoint.objects.get().id
+        url = f"/api/v1/face-recognition/start/{control_point_id}/"
+        print(url)
+        response = self.client.get(path=url)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.client.get(path=f"/api/v1/face-recognition/stop/{control_point_id}/")
+
+    def test_change_access_list(self):
+        control_point_id = ControlPoint.objects.get().id
+        worker_id = Worker.objects.get().id
+        url = f"/api/v1/control-points/{control_point_id}/"
+        data = {
+            "workers": [
+                worker_id
+            ]
+        }
+        response = self.client.patch(path=url, data=json.dumps(data), content_type="application/json")
+        print(response)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(ControlPoint.objects.get().workers.count(), 1)
