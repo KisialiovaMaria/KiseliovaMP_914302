@@ -1,15 +1,10 @@
 import json
-import unittest
 
 from rest_framework import status
-from rest_framework.reverse import reverse
-from rest_framework.test import APITestCase, APIRequestFactory, APIClient
-from workers.models import User, Department, Position, Worker, ControlPoint
-from workers.Serializers import DepartmentSerializer, PositionSerializer
-from workers.views import UserViewSet
+from rest_framework.test import APITestCase
+from workers.models import *
 
-import logging
-logger = logging.getLogger(__name__)
+
 class WorkerTests(APITestCase):
 
     def setUp(self):
@@ -68,9 +63,10 @@ class WorkerTests(APITestCase):
     def test_change_access_list(self):
         id = Worker.objects.get().id
         url = f"/api/v1/workers/{id}/"
+        control_point_id = ControlPoint.objects.get().id
         data = {
             "controlPoints": [
-                1
+                control_point_id
             ]
         }
         response = self.client.patch(path=url, data=json.dumps(data), content_type="application/json")
@@ -112,10 +108,47 @@ class WorkerTests(APITestCase):
 
 class NotificationsTests(APITestCase):
     def setUp(self):
-        pass
+        Department.objects.create(departmentName="test")
+        Position.objects.create(positionName="test")
+        User.objects.create(username="username", password="pass")
+        ControlPoint.objects.create(name="test")
+        EventType.objects.create(eventType="test_type")
+        user = User.objects.get(username='username')
+        self.client.force_authenticate(user=user)
+
 
     def test_create_notification(self):
-        pass
+        url = "/api/v1/notifications/"
+        username = User.objects.get().username
+        eventType = EventType.objects.get().eventType
+        control_point = ControlPoint.objects.get().name
+        data = {
+            "user": username,
+            "eventType": eventType,
+            "controlPoint": control_point,
+            "activity": False
+        }
+        response = self.client.post(path=url, data=json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Notifications.objects.count(), 1)
+        self.assertEqual(Notifications.objects.get().user, User.objects.get())
+        self.assertEqual(Notifications.objects.get().controlPoint, ControlPoint.objects.get())
 
     def test_turn_on_notification(self):
-        pass
+        self.test_create_notification()
+        notification_id = Notifications.objects.get().id
+        url = f"/api/v1/notifications/{notification_id}/"
+        data = {
+            "activity": True
+        }
+        response=self.client.patch(path=url, data=json.dumps(data), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(Notifications.objects.get().activity, True)
+
+    def test_delete_notification(self):
+        self.test_create_notification()
+        notification_id = Notifications.objects.get().id
+        url = f"/api/v1/notifications/{notification_id}/"
+        response = self.client.delete(path=url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Notifications.objects.count(), 0)
